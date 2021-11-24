@@ -6,14 +6,16 @@ import java.util.Random;
 public class main {
 
     public static void main(String[] args) {
-        for (int i = 5; i <= 100; i += 5) System.out.println("Média de Comparações 50 vetores de tamanho " + i + " : " +testBubbleSort(generateArrays(i)));
+        for (int i = 5; i <= 100; i += 5)
+            System.out.println(
+                    "Média de Comparações 50 vetores de tamanho " + i + " : " + testBubbleSort(generateArrays(i)));
     }
 
-    public static ArrayList<int[]> generateArrays(int size){
+    public static ArrayList<int[]> generateArrays(int size) {
         ArrayList<int[]> arrays = new ArrayList<>();
-        for(int i = 0; i < 50; i++){
+        for (int i = 0; i < 50; i++) {
             int[] array = new int[size];
-            for(int j = 0; j < size; j++){
+            for (int j = 0; j < size; j++) {
                 array[j] = (new Random()).nextInt(49) + 1;
             }
             arrays.add(array);
@@ -21,10 +23,11 @@ public class main {
         return arrays;
     }
 
-    public static int testBubbleSort(ArrayList<int[]> arrays){
+    public static int testBubbleSort(ArrayList<int[]> arrays) {
         int mean = 0;
-        for(int[] array : arrays) mean += bubbleSort(array);
-        return mean/50;
+        for (int[] array : arrays)
+            mean += bubbleSort(array);
+        return mean / 50;
     }
 
     public static void mergeSort(int[] Array, int Start, int End) {
@@ -104,11 +107,11 @@ public class main {
         return left;
     }
 
-    public static int bubbleSort(int[] Array){
+    public static int bubbleSort(int[] Array) {
         int comparations = 0;
-        for(int i = 0; i < Array.length; i++){
-            for(int j = 0; j < (Array.length - 1 ); j++){
-                if(Array[j] > Array[j + 1]){
+        for (int i = 0; i < Array.length; i++) {
+            for (int j = 0; j < (Array.length - 1); j++) {
+                if (Array[j] > Array[j + 1]) {
                     comparations++;
                     int aux = 0;
                     aux = Array[j];
@@ -120,26 +123,11 @@ public class main {
         return comparations;
     }
 
-    /*
-    public static void bubbleSort(int[] Array){
-        for(int i = 0; i < Array.length; i++){
-            for(int j = 0; j < (Array.length - 1 ); j++){
-                if(Array[j] > Array[j + 1]){
-                    int aux = 0;
-                    aux = Array[j];
-                    Array[j] = Array[j + 1];
-                    Array[j + 1] = aux;
-                }
-            }
-        }
-    }
-     */
-
-    public static void selectionSort(int[] Array){
-        for(int i = 0; i < (Array.length - 1); i++){
+    public static void selectionSort(int[] Array) {
+        for (int i = 0; i < (Array.length - 1); i++) {
             int index = i;
-            for(int j = i + 1; j < Array.length; j++){
-                if(Array[j] < Array[index]){
+            for (int j = i + 1; j < Array.length; j++) {
+                if (Array[j] < Array[index]) {
                     index = j;
                 }
             }
