@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class main {
@@ -134,6 +132,18 @@ public class main {
             int numberSmall = Array[index];
             Array[index] = Array[i];
             Array[i] = numberSmall;
+        }
+    }
+
+    public static void insertionSort(int[] Array) {
+        for (int i = 1; i <= (Array.length - 1); i++) {
+            int numberSmall = Array[i];
+            int j = i - 1;
+            while ((j > -1) && (Array[j] > numberSmall)) {
+                Array[j + 1] = Array[j];
+                j--;
+            }
+            Array[j + 1] = numberSmall;
         }
     }
 }
