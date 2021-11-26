@@ -134,6 +134,7 @@ public class main {
     }
 
     public static void merge(int[] Array, int Start, int Mid, int End) {
+        int comparisons = 0;
         int[] sortArray = new int[End - Start];
         int start = Start;
         int mid = Mid;
@@ -154,11 +155,13 @@ public class main {
             sortArray[position] = Array[start];
             position++;
             start++;
+            comparisons++;
         }
         while (mid < End) {
             sortArray[position] = Array[mid];
             position++;
             mid++;
+            comparisons++;
         }
         for (position = 0, start = Start; start < End; start++, position++) {
             Array[start] = sortArray[position];
@@ -170,12 +173,15 @@ public class main {
     }
 
     public static void recursiveQuickSort(int[] array, int startIdx, int endIdx) {
+        int comparisons = 0;
         int idx = partition(array, startIdx, endIdx);
         if (startIdx < idx - 1) {
             recursiveQuickSort(array, startIdx, idx - 1);
+            comparisons++;
         }
         if (endIdx > idx) {
             recursiveQuickSort(array, idx, endIdx);
+            comparisons++;
         }
     }
 
