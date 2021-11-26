@@ -1,12 +1,19 @@
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.Random;
 
 public class main {
 
     public static void main(String[] args) {
+        compareAllMethods(5);
+        /*
         for (int i = 5; i <= 100; i += 5)
             System.out.println(
                     "Média de Comparações 50 vetores de tamanho " + i + " : " + testSortMethod(generateArrays(i), "bubbleSort"));
+
+         */
     }
 
     public static ArrayList<int[]> generateArrays(int size) {
@@ -21,24 +28,41 @@ public class main {
         return arrays;
     }
 
-    public static int testSortMethod(ArrayList<int[]> arrays, String method) {
+    public static int testSortMethod(ArrayList<int[]> arrays, int methodNumber) {
         int mean = 0;
-        switch (method) {
-            case "bubbleSort":
+        switch (methodNumber) {
+            case 1:
                 for (int[] array : arrays) mean += bubbleSort(array);
+                System.out.print("BubbleSort : ");
                 break;
-            case "selectionSort":
+            case 2:
                 for (int[] array : arrays) mean += selectionSort(array);
+                System.out.print("SelectionSort : ");
                 break;
-            case "insertionSort":
+            case 3:
                 for (int[] array : arrays) mean += insertionSort(array);
+                System.out.print("InsertionSort : ");
                 break;
-            case "mergeSort":
+            case 4:
+                for (int[] array : arrays) mean += mergeSort(array, 0, array.length);
+                System.out.print("MergeSort : ");
                 break;
-            case "quickSort":
+            default:
+                mean = -50;
                 break;
         }
         return mean / 50;
+    }
+
+    public static void compareAllMethods (int arraySize){
+        ArrayList<int[]> arrayList;
+        int result = 0, methodNumber = 0;
+        do {
+            methodNumber++;
+            arrayList = generateArrays(arraySize);
+            result = testSortMethod(arrayList, methodNumber);
+            if(result >=0) System.out.println(result);
+        } while (result >= 0);
     }
 
     public static int bubbleSort(int[] array) {
@@ -122,7 +146,7 @@ public class main {
         }
     }
 
-    public static void mergeSort(int[] Array, int Start, int End) {
+    public static int mergeSort(int[] Array, int Start, int End) {
         int mid = (Start + End) / 2;
 
         if (Start < (End - 1)) {
@@ -133,7 +157,7 @@ public class main {
         }
     }
 
-    public static void merge(int[] Array, int Start, int Mid, int End) {
+    public static int merge(int[] Array, int Start, int Mid, int End) {
         int comparisons = 0;
         int[] sortArray = new int[End - Start];
         int start = Start;
@@ -166,6 +190,7 @@ public class main {
         for (position = 0, start = Start; start < End; start++, position++) {
             Array[start] = sortArray[position];
         }
+        return comparisons;
     }
 
     public static void quickSort(int[] array) {
