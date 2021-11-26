@@ -6,7 +6,7 @@ public class main {
     public static void main(String[] args) {
         for (int i = 5; i <= 100; i += 5)
             System.out.println(
-                    "Média de Comparações 50 vetores de tamanho " + i + " : " + testBubbleSort(generateArrays(i)));
+                    "Média de Comparações 50 vetores de tamanho " + i + " : " + testSortMethod(generateArrays(i), "bubbleSort"));
     }
 
     public static ArrayList<int[]> generateArrays(int size) {
@@ -21,11 +21,72 @@ public class main {
         return arrays;
     }
 
-    public static int testBubbleSort(ArrayList<int[]> arrays) {
+    public static int testSortMethod(ArrayList<int[]> arrays, String method) {
         int mean = 0;
-        for (int[] array : arrays)
-            mean += bubbleSort(array);
+        switch (method) {
+            case "bubbleSort":
+                for (int[] array : arrays) mean += bubbleSort(array);
+                break;
+            case "insertionSort":
+                for (int[] array : arrays) mean += insertionSort(array);
+                break;
+            case "selectionSort":
+                for (int[] array : arrays) mean += selectionSort(array);
+                break;
+            case "mergeSort":
+                break;
+            case "quickSort":
+                break;
+        }
         return mean / 50;
+    }
+
+    public static int bubbleSort(int[] Array) {
+        int comparisons = 0;
+        for (int i = 0; i < Array.length; i++) {
+            for (int j = 0; j < (Array.length - 1); j++) {
+                if (Array[j] > Array[j + 1]) {
+                    comparisons++;
+                    int aux = 0;
+                    aux = Array[j];
+                    Array[j] = Array[j + 1];
+                    Array[j + 1] = aux;
+                }
+            }
+        }
+        return comparisons;
+    }
+
+    public static int insertionSort(int[] Array) {
+        int comparisons = 0;
+        for (int i = 1; i <= (Array.length - 1); i++) {
+            int numberSmall = Array[i];
+            int j = i - 1;
+            while ((j > -1) && (Array[j] > numberSmall)) {
+                comparisons++;
+                Array[j + 1] = Array[j];
+                j--;
+            }
+            Array[j + 1] = numberSmall;
+        }
+        return comparisons;
+    }
+
+    public static int selectionSort(int[] Array) {
+        int comparisons = 0;
+        for (int i = 0; i < (Array.length - 1); i++) {
+            int index = i;
+            for (int j = i + 1; j < Array.length; j++) {
+                if (Array[j] < Array[index]) {
+                    comparisons++;
+                    index = j;
+                }
+            }
+            int numberSmall = Array[index];
+            Array[index] = Array[i];
+            Array[i] = numberSmall;
+        }
+        return comparisons;
     }
 
     public static void mergeSort(int[] Array, int Start, int End) {
@@ -103,47 +164,5 @@ public class main {
             }
         }
         return left;
-    }
-
-    public static int bubbleSort(int[] Array) {
-        int comparations = 0;
-        for (int i = 0; i < Array.length; i++) {
-            for (int j = 0; j < (Array.length - 1); j++) {
-                if (Array[j] > Array[j + 1]) {
-                    comparations++;
-                    int aux = 0;
-                    aux = Array[j];
-                    Array[j] = Array[j + 1];
-                    Array[j + 1] = aux;
-                }
-            }
-        }
-        return comparations;
-    }
-
-    public static void selectionSort(int[] Array) {
-        for (int i = 0; i < (Array.length - 1); i++) {
-            int index = i;
-            for (int j = i + 1; j < Array.length; j++) {
-                if (Array[j] < Array[index]) {
-                    index = j;
-                }
-            }
-            int numberSmall = Array[index];
-            Array[index] = Array[i];
-            Array[i] = numberSmall;
-        }
-    }
-
-    public static void insertionSort(int[] Array) {
-        for (int i = 1; i <= (Array.length - 1); i++) {
-            int numberSmall = Array[i];
-            int j = i - 1;
-            while ((j > -1) && (Array[j] > numberSmall)) {
-                Array[j + 1] = Array[j];
-                j--;
-            }
-            Array[j + 1] = numberSmall;
-        }
     }
 }
