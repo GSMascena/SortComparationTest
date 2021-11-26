@@ -293,4 +293,71 @@ public class main {
         int[] result = {left, comparison};
         return result;
     }
+
+        
+    public static int getMax(int[] Array) {
+        int max = Array[0];
+        for (int i = 1; i < Array.length; i++)
+            if (Array[i] > max) {
+                max = Array[i];
+            }
+
+        return max;
+    }
+
+    public static void radixCountSort(int[] Array, int digit){
+        int arrayPivo[] = new int[Array.length];
+        int count[] = new int[10];
+        Arrays.fill(count, 0);
+
+        for(int i = 0; i < Array.length; i++)
+            count[(Array[i]/digit) % 10]++;
+
+        for(int i = 1; i < 10; i++)
+            count[i] += count[i - 1];
+
+        for(int i = Array.length - 1; i >= 0; i--){
+            arrayPivo[count[(Array[i] / digit) % 10] - 1] = Array[i];
+            count[(Array[i] / digit) % 10]--;
+        }
+
+        for(int i = 0; i < Array.length; i++){
+            Array[i] = arrayPivo[i];
+        }
+    }
+
+    public static void radixSort(int[] Array){
+        int max = getMax(Array);
+
+        for(int i = 1; max / i > 0; i *= 10)
+            radixCountSort(Array, i);
+    }
+
+    public static int[] countElementSort(int[] Array){
+        int[] newArray = new int[getMax(Array) + 1];
+        Arrays.fill(newArray, 0);
+
+        for(int i : Array){
+            newArray[i] += 1;
+        }
+
+        for(int i = 1; i < newArray.length; i++){
+            newArray[i] += newArray[i - 1];
+        }
+
+        return newArray;
+    }
+
+    public static int[] countSort(int[] Array){
+        int[] newArray = countElementSort(Array);
+        int[] sort = new int[Array.length];
+        
+        for(int i = Array.length - 1; i >= 0; i--){
+            int current = Array[i];
+            sort[newArray[current] - 1] = current;
+            newArray[current] -= 1;
+        }
+
+        return sort;
+    }
 }
