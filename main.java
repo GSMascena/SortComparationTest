@@ -7,13 +7,7 @@ import java.util.Random;
 public class main {
 
     public static void main(String[] args) {
-        compareAllMethods(5);
-        /*
-        for (int i = 5; i <= 100; i += 5)
-            System.out.println(
-                    "Média de Comparações 50 vetores de tamanho " + i + " : " + testSortMethod(generateArrays(i), "bubbleSort"));
-
-         */
+        compareAllMethods(1000);
     }
 
     public static ArrayList<int[]> generateArrays(int size) {
@@ -21,7 +15,7 @@ public class main {
         for (int i = 0; i < 50; i++) {
             int[] array = new int[size];
             for (int j = 0; j < size; j++) {
-                array[j] = (new Random()).nextInt(49) + 1;
+                array[j] = (new Random()).nextInt(9999) + 1;
             }
             arrays.add(array);
         }
@@ -44,8 +38,12 @@ public class main {
                 System.out.print("InsertionSort : ");
                 break;
             case 4:
-                for (int[] array : arrays) mean += mergeSort(array, 0, array.length);
+                for (int[] array : arrays) mean += mergeSort(array, 0, array.length-1);
                 System.out.print("MergeSort : ");
+                break;
+            case 5:
+                for (int[] array : arrays) mean += quickSort(array);
+                System.out.print("QuickSort : ");
                 break;
             default:
                 mean = -50;
@@ -146,15 +144,17 @@ public class main {
         }
     }
 
+    /*
     public static int mergeSort(int[] Array, int Start, int End) {
         int mid = (Start + End) / 2;
-
+        int comparison = 0;
         if (Start < (End - 1)) {
-            mergeSort(Array, Start, mid);
-            mergeSort(Array, mid, End);
+            comparison += mergeSort(Array, Start, mid, comparison);
+            comparison += mergeSort(Array, mid, End, comparison);
 
-            merge(Array, Start, mid, End);
+            comparison += merge(Array, Start, mid, End);
         }
+        return comparison;
     }
 
     public static int merge(int[] Array, int Start, int Mid, int End) {
@@ -192,27 +192,90 @@ public class main {
         }
         return comparisons;
     }
+    */
 
-    public static void quickSort(int[] array) {
-        recursiveQuickSort(array, 0, array.length - 1);
+    public static int mergeSort(int array[], int start, int end)
+    {
+        int comparison = 0;
+        if (start < end) {
+            int middle =start+ (end-start)/2;
+
+            comparison += mergeSort(array, start, middle);
+            comparison += mergeSort(array, middle + 1, end);
+
+            comparison += merge(array, start, middle, end);
+        }
+        return comparison;
     }
 
-    public static void recursiveQuickSort(int[] array, int startIdx, int endIdx) {
+    public static int merge(int array[], int start, int middle, int end)
+    {
+        int comparison = 0;
+
+        int n1 = middle - start + 1;
+        int n2 = end - middle;
+
+        int Start[] = new int[n1];
+        int End[] = new int[n2];
+
+        for (int i = 0; i < n1; ++i)
+            Start[i] = array[start + i];
+        for (int j = 0; j < n2; ++j)
+            End[j] = array[middle + 1 + j];
+
+        int i = 0, j = 0;
+
+        int k = start;
+        while (i < n1 && j < n2) {
+            if (Start[i] <= End[j]) {
+                comparison++;
+                array[k] = Start[i];
+                i++;
+            }
+            else {
+                array[k] = End[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            array[k] = Start[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            array[k] = End[j];
+            j++;
+            k++;
+        }
+        return comparison;
+    }
+
+    public static int quickSort(int[] array) {
+        return recursiveQuickSort(array, 0, array.length - 1);
+    }
+
+    public static int recursiveQuickSort(int[] array, int startIdx, int endIdx) {
         int comparisons = 0;
-        int idx = partition(array, startIdx, endIdx);
+        int[] result = partition(array, startIdx, endIdx);
+        int idx = result[0];
+        comparisons += result[1];
         if (startIdx < idx - 1) {
-            recursiveQuickSort(array, startIdx, idx - 1);
-            comparisons++;
+            comparisons += recursiveQuickSort(array, startIdx, idx - 1);
         }
         if (endIdx > idx) {
-            recursiveQuickSort(array, idx, endIdx);
-            comparisons++;
+            comparisons += recursiveQuickSort(array, idx, endIdx);
         }
+        return comparisons;
     }
 
-    public static int partition(int[] array, int left, int right) {
+    public static int[] partition(int[] array, int left, int right) {
         int pivot = array[left];
+        int comparison = 0;
         while (left <= right) {
+            comparison++;
             while (array[left] > pivot) {
                 left++;
             }
@@ -227,6 +290,7 @@ public class main {
                 right--;
             }
         }
-        return left;
+        int[] result = {left, comparison};
+        return result;
     }
 }
