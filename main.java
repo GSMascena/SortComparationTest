@@ -27,11 +27,11 @@ public class main {
             case "bubbleSort":
                 for (int[] array : arrays) mean += bubbleSort(array);
                 break;
-            case "insertionSort":
-                for (int[] array : arrays) mean += insertionSort(array);
-                break;
             case "selectionSort":
                 for (int[] array : arrays) mean += selectionSort(array);
+                break;
+            case "insertionSort":
+                for (int[] array : arrays) mean += insertionSort(array);
                 break;
             case "mergeSort":
                 break;
@@ -41,52 +41,85 @@ public class main {
         return mean / 50;
     }
 
-    public static int bubbleSort(int[] Array) {
+    public static int bubbleSort(int[] array) {
         int comparisons = 0;
-        for (int i = 0; i < Array.length; i++) {
-            for (int j = 0; j < (Array.length - 1); j++) {
-                if (Array[j] > Array[j + 1]) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < (array.length - 1); j++) {
+                if (array[j] > array[j + 1]) {
                     comparisons++;
                     int aux = 0;
-                    aux = Array[j];
-                    Array[j] = Array[j + 1];
-                    Array[j + 1] = aux;
+                    aux = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = aux;
                 }
             }
         }
         return comparisons;
     }
 
-    public static int insertionSort(int[] Array) {
+    public static int selectionSort(int[] array) {
         int comparisons = 0;
-        for (int i = 1; i <= (Array.length - 1); i++) {
-            int numberSmall = Array[i];
-            int j = i - 1;
-            while ((j > -1) && (Array[j] > numberSmall)) {
-                comparisons++;
-                Array[j + 1] = Array[j];
-                j--;
-            }
-            Array[j + 1] = numberSmall;
-        }
-        return comparisons;
-    }
-
-    public static int selectionSort(int[] Array) {
-        int comparisons = 0;
-        for (int i = 0; i < (Array.length - 1); i++) {
+        for (int i = 0; i < (array.length - 1); i++) {
             int index = i;
-            for (int j = i + 1; j < Array.length; j++) {
-                if (Array[j] < Array[index]) {
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[j] < array[index]) {
                     comparisons++;
                     index = j;
                 }
             }
-            int numberSmall = Array[index];
-            Array[index] = Array[i];
-            Array[i] = numberSmall;
+            int numberSmall = array[index];
+            array[index] = array[i];
+            array[i] = numberSmall;
         }
         return comparisons;
+    }
+
+    public static int insertionSort(int[] array) {
+        int comparisons = 0;
+        for (int i = 1; i <= (array.length - 1); i++) {
+            int numberSmall = array[i];
+            int j = i - 1;
+            while ((j > -1) && (array[j] > numberSmall)) {
+                comparisons++;
+                array[j + 1] = array[j];
+                j--;
+            }
+            array[j + 1] = numberSmall;
+        }
+        return comparisons;
+    }
+
+    public static void heapSort(int[] array){
+        int n = array.length;
+
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify(array, n, i);
+
+        for (int i = n - 1; i > 0; i--){
+            int temp = array[0];
+            array[0] = array[i];
+            array[i] = temp;
+
+            heapify(array, i, 0);
+        }
+    }
+
+    public static void heapify(int array[], int n, int i){
+        int largest = i;
+        int l = 2 * i + 1;
+        int r = 2 * i + 2;
+
+        if (l < n && array[l] > array[largest])
+            largest = l;
+        if (r < n && array[r] > array[largest])
+            largest = r;
+        if (largest != i){
+            int swap = array[i];
+            array[i] = array[largest];
+            array[largest] = swap;
+
+            heapify(array, n, largest);
+        }
     }
 
     public static void mergeSort(int[] Array, int Start, int End) {
