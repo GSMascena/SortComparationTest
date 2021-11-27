@@ -45,6 +45,14 @@ public class main {
                 for (int[] array : arrays) mean += quickSort(array);
                 System.out.print("QuickSort : ");
                 break;
+            case 6:
+                for (int[] array : arrays) mean += countSort(array);
+                System.out.print("CountSort : ");
+                break;
+            case 7:
+                for (int[] array : arrays) mean += radixSort(array);
+                System.out.print("RadixSort : ");
+                break;
             default:
                 mean = -50;
                 break;
@@ -63,6 +71,7 @@ public class main {
         } while (result >= 0);
     }
 
+    //Bubble
     public static int bubbleSort(int[] array) {
         int comparisons = 0;
         for (int i = 0; i < array.length; i++) {
@@ -79,6 +88,7 @@ public class main {
         return comparisons;
     }
 
+    //Selection
     public static int selectionSort(int[] array) {
         int comparisons = 0;
         for (int i = 0; i < (array.length - 1); i++) {
@@ -96,6 +106,7 @@ public class main {
         return comparisons;
     }
 
+    //Insertion
     public static int insertionSort(int[] array) {
         int comparisons = 0;
         for (int i = 1; i <= (array.length - 1); i++) {
@@ -111,6 +122,7 @@ public class main {
         return comparisons;
     }
 
+    //Heap
     public static void heapSort(int[] array){
         int n = array.length;
 
@@ -144,56 +156,7 @@ public class main {
         }
     }
 
-    /*
-    public static int mergeSort(int[] Array, int Start, int End) {
-        int mid = (Start + End) / 2;
-        int comparison = 0;
-        if (Start < (End - 1)) {
-            comparison += mergeSort(Array, Start, mid, comparison);
-            comparison += mergeSort(Array, mid, End, comparison);
-
-            comparison += merge(Array, Start, mid, End);
-        }
-        return comparison;
-    }
-
-    public static int merge(int[] Array, int Start, int Mid, int End) {
-        int comparisons = 0;
-        int[] sortArray = new int[End - Start];
-        int start = Start;
-        int mid = Mid;
-        int position = 0;
-
-        while (start < Mid && mid < End) {
-            if (Array[start] >= Array[mid]) {
-                sortArray[position] = Array[start];
-                position++;
-                start++;
-            } else {
-                sortArray[position] = Array[mid];
-                position++;
-                mid++;
-            }
-        }
-        while (start < Mid) {
-            sortArray[position] = Array[start];
-            position++;
-            start++;
-            comparisons++;
-        }
-        while (mid < End) {
-            sortArray[position] = Array[mid];
-            position++;
-            mid++;
-            comparisons++;
-        }
-        for (position = 0, start = Start; start < End; start++, position++) {
-            Array[start] = sortArray[position];
-        }
-        return comparisons;
-    }
-    */
-
+    //Merge
     public static int mergeSort(int array[], int start, int end)
     {
         int comparison = 0;
@@ -253,6 +216,7 @@ public class main {
         return comparison;
     }
 
+    //Quick
     public static int quickSort(int[] array) {
         return recursiveQuickSort(array, 0, array.length - 1);
     }
@@ -294,7 +258,7 @@ public class main {
         return result;
     }
 
-        
+    //Count
     public static int getMax(int[] Array) {
         int max = Array[0];
         for (int i = 1; i < Array.length; i++)
@@ -303,34 +267,6 @@ public class main {
             }
 
         return max;
-    }
-
-    public static void radixCountSort(int[] Array, int digit){
-        int arrayPivo[] = new int[Array.length];
-        int count[] = new int[10];
-        Arrays.fill(count, 0);
-
-        for(int i = 0; i < Array.length; i++)
-            count[(Array[i]/digit) % 10]++;
-
-        for(int i = 1; i < 10; i++)
-            count[i] += count[i - 1];
-
-        for(int i = Array.length - 1; i >= 0; i--){
-            arrayPivo[count[(Array[i] / digit) % 10] - 1] = Array[i];
-            count[(Array[i] / digit) % 10]--;
-        }
-
-        for(int i = 0; i < Array.length; i++){
-            Array[i] = arrayPivo[i];
-        }
-    }
-
-    public static void radixSort(int[] Array){
-        int max = getMax(Array);
-
-        for(int i = 1; max / i > 0; i *= 10)
-            radixCountSort(Array, i);
     }
 
     public static int[] countElementSort(int[] Array){
@@ -348,16 +284,58 @@ public class main {
         return newArray;
     }
 
-    public static int[] countSort(int[] Array){
+    public static int countSort(int[] Array){
         int[] newArray = countElementSort(Array);
         int[] sort = new int[Array.length];
-        
+
+        int comparations = 0;
+
         for(int i = Array.length - 1; i >= 0; i--){
+            comparations++;
             int current = Array[i];
             sort[newArray[current] - 1] = current;
             newArray[current] -= 1;
         }
 
-        return sort;
+        return comparations;
     }
+
+    //Radix
+    public static int radixCountSort(int[] Array, int digit){
+        int arrayPivo[] = new int[Array.length];
+        int count[] = new int[10];
+        Arrays.fill(count, 0);
+
+        int comparison = 0;
+
+        for(int i = 0; i < Array.length; i++){
+            comparison++;
+            count[(Array[i]/digit) % 10]++;
+        }
+
+        for(int i = 1; i < 10; i++)
+            count[i] += count[i - 1];
+
+        for(int i = Array.length - 1; i >= 0; i--){
+            arrayPivo[count[(Array[i] / digit) % 10] - 1] = Array[i];
+            count[(Array[i] / digit) % 10]--;
+        }
+
+        for(int i = 0; i < Array.length; i++){
+            Array[i] = arrayPivo[i];
+        }
+        return comparison;
+    }
+
+    public static int radixSort(int[] Array){
+        int comparison = 0;
+
+        int max = getMax(Array);
+
+        for(int i = 1; max / i > 0; i *= 10)
+            comparison += radixCountSort(Array, i);
+
+        return comparison;
+    }
+
 }
