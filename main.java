@@ -10,7 +10,12 @@ import java.util.Random;
 public class main {
 
     public static void main(String[] args) {
+        compareAllMethods(5);
+        compareAllMethods(10);
+        compareAllMethods(50);
+        compareAllMethods(100);
         compareAllMethods(1000);
+        compareAllMethods(10000);
     }
 
     public static ArrayList<int[]> generateArrays(int size) {
@@ -18,14 +23,14 @@ public class main {
         for (int i = 0; i < 50; i++) {
             int[] array = new int[size];
             for (int j = 0; j < size; j++) {
-                array[j] = (new Random()).nextInt(9999) + 1;
+                array[j] = (new Random()).nextInt(10000) + 1;
             }
             arrays.add(array);
         }
         return arrays;
     }
 
-    public static int testSortMethod(ArrayList<int[]> arrays, int methodNumber) {
+    public static double testSortMethod(ArrayList<int[]> arrays, int methodNumber) {
         int mean = 0;
         switch (methodNumber) {
             case 1:
@@ -41,18 +46,26 @@ public class main {
                 System.out.print("InsertionSort : ");
                 break;
             case 4:
+                for (int[] array : arrays) mean += heapSort(array);
+                System.out.print("HeapSort : ");
+                break;
+            case 5:
                 for (int[] array : arrays) mean += mergeSort(array, 0, array.length-1);
                 System.out.print("MergeSort : ");
                 break;
-            case 5:
+            case 6:
                 for (int[] array : arrays) mean += quickSort(array);
                 System.out.print("QuickSort : ");
                 break;
-            case 6:
+            case 7:
                 for (int[] array : arrays) mean += countSort(array);
                 System.out.print("CountSort : ");
                 break;
-            case 7:
+            case 8:
+                for (int[] array : arrays) mean += bucketSort(array);
+                System.out.print("BucketSort : ");
+                break;
+            case 9:
                 for (int[] array : arrays) mean += radixSort(array);
                 System.out.print("RadixSort : ");
                 break;
@@ -60,16 +73,26 @@ public class main {
                 mean = -50;
                 break;
         }
-        return mean / 50;
+        return mean / 50.0;
     }
 
     public static void compareAllMethods (int arraySize){
         ArrayList<int[]> arrayList;
-        int result = 0, methodNumber = 0;
+        double result = 0;
+        int methodNumber = 0;
+        arrayList = generateArrays(arraySize);
+        System.out.println("Considerando vetores de tamanho " + arraySize);
         do {
             methodNumber++;
-            arrayList = generateArrays(arraySize);
-            result = testSortMethod(arrayList, methodNumber);
+            ArrayList<int[]> copyList = new ArrayList<>();
+            for(int[] array : arrayList){
+                int[] copyArray = new int[array.length];
+                for(int i = 0; i < array.length; i++){
+                    copyArray[i] = array[i];
+                }
+                copyList.add(copyArray);
+            }
+            result = testSortMethod(copyList, methodNumber);
             if(result >=0) System.out.println(result);
         } while (result >= 0);
     }
@@ -126,37 +149,45 @@ public class main {
     }
 
     //Heap
-    public static void heapSort(int[] array){
+    public static int heapSort(int[] array){
         int n = array.length;
-
+        int comparison = 0;
         for (int i = n / 2 - 1; i >= 0; i--)
-            heapify(array, n, i);
+            comparison += heapify(array, n, i);
 
         for (int i = n - 1; i > 0; i--){
             int temp = array[0];
             array[0] = array[i];
             array[i] = temp;
 
-            heapify(array, i, 0);
+            comparison += heapify(array, i, 0);
         }
+        return comparison;
     }
 
-    public static void heapify(int array[], int n, int i){
+    public static int heapify(int array[], int n, int i){
         int largest = i;
         int l = 2 * i + 1;
         int r = 2 * i + 2;
 
-        if (l < n && array[l] > array[largest])
+        int comparison = 0;
+
+        if (l < n && array[l] > array[largest]){
+            comparison++;
             largest = l;
-        if (r < n && array[r] > array[largest])
+        }
+        if (r < n && array[r] > array[largest]){
+            comparison++;
             largest = r;
+        }
         if (largest != i){
             int swap = array[i];
             array[i] = array[largest];
             array[largest] = swap;
 
-            heapify(array, n, largest);
+            comparison += heapify(array, n, largest);
         }
+        return comparison;
     }
 
     //Merge
@@ -341,7 +372,8 @@ public class main {
         return comparison;
     }
 
-    public static void bucketSort(int[] Array){
+    public static int bucketSort(int[] Array){
+        int comparison = 0;
         int numberBucket = getMax(Array) / 5;
 
         LinkedList[] bucket = new LinkedList[numberBucket];
@@ -352,6 +384,7 @@ public class main {
         for (int i = 0; i < Array.length; i++) {
             for(int j = numberBucket - 1; j >= 0; j--){
                 if(Array[i] >= (j*5)){
+                    comparison++;
                     bucket[j].add(Array[i]);
                     break;
                }
@@ -371,7 +404,8 @@ public class main {
             for (int j = 0; j < aux.length; j++, index++){
                 Array[index] = aux[j];
             }
-    
+
         }
+        return comparison;
     }
 }
