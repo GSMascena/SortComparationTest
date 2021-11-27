@@ -1,7 +1,10 @@
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class main {
@@ -338,4 +341,37 @@ public class main {
         return comparison;
     }
 
+    public static void bucketSort(int[] Array){
+        int numberBucket = getMax(Array) / 5;
+
+        LinkedList[] bucket = new LinkedList[numberBucket];
+    
+        for (int i = 0; i < numberBucket; i++)
+            bucket[i] = new LinkedList<Integer>();
+
+        for (int i = 0; i < Array.length; i++) {
+            for(int j = numberBucket - 1; j >= 0; j--){
+                if(Array[i] >= (j*5)){
+                    bucket[j].add(Array[i]);
+                    break;
+               }
+            }
+        }
+
+        int index = 0;
+        for (int i = 0; i < numberBucket; i++){
+            int[] aux = new int[bucket[i].size()];
+
+            for (int j = 0; j < aux.length; j++){
+                    aux[j] = (Integer)bucket[i].get(j);
+            }
+    
+            insertionSort(aux);
+
+            for (int j = 0; j < aux.length; j++, index++){
+                Array[index] = aux[j];
+            }
+    
+        }
+    }
 }
